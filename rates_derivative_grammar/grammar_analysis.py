@@ -9,7 +9,7 @@ from lark.grammar import Rule, Symbol, Terminal, NonTerminal
 from .utils import classify, is_discarded_terminal, is_inline_rule
 
 
-__all__ = ['Grammar']
+__all__ = ["Grammar"]
 
 
 def make_visited_predicate() -> Callable[[Rule], bool]:
@@ -35,8 +35,13 @@ class Grammar:
 
     @staticmethod
     def discard_terminals(rule: Rule) -> Rule:
-        return Rule(rule.origin, [exp for exp in rule.expansion if not is_discarded_terminal(exp)],
-                    rule.order, rule.alias, rule.options)
+        return Rule(
+            rule.origin,
+            [exp for exp in rule.expansion if not is_discarded_terminal(exp)],
+            rule.order,
+            rule.alias,
+            rule.options,
+        )
 
     @staticmethod
     def get_all_terminals(rules: Iterable[Rule]) -> Iterable[Symbol]:
@@ -48,7 +53,7 @@ class Grammar:
 
     @staticmethod
     def get_rules_by_origin(rules: Iterable[Rule]) -> Dict[NonTerminal, List[Rule]]:
-        return classify(rules, attrgetter('origin'))
+        return classify(rules, attrgetter("origin"))
 
     @staticmethod
     def get_parents_by_origin(rules: Iterable[Rule]) -> Dict[NonTerminal, OrderedSet]:
@@ -71,7 +76,7 @@ class Grammar:
         for origin in list(rules_by_origin):
             should_expand = set(map(is_inline_rule, rules_by_origin[origin]))
             if not should_expand:
-                raise ValueError(f'Inconsistent set of inline rules for origin: {origin.name}.')
+                raise ValueError(f"Inconsistent set of inline rules for origin: {origin.name}.")
 
             if should_expand.pop():
                 rules = rules_by_origin.pop(origin)
@@ -87,8 +92,15 @@ class Grammar:
                                         children.extend(rule.expansion)
                                     else:
                                         children.append(child)
-                                new_parent_rules.append(Rule(parent_rule.origin, children, parent_rule.order,
-                                                             parent_rule.alias, parent_rule.options))
+                                new_parent_rules.append(
+                                    Rule(
+                                        parent_rule.origin,
+                                        children,
+                                        parent_rule.order,
+                                        parent_rule.alias,
+                                        parent_rule.options,
+                                    )
+                                )
                         else:
                             new_parent_rules.append(parent_rule)
                     rules_by_origin[parent] = new_parent_rules
@@ -127,7 +139,7 @@ class Grammar:
 
         """
         terminals = self.get_all_terminals(self._iter_depth_first(predicate=make_visited_predicate()))
-        sorted_symbols = list(map(attrgetter('name'), terminals))
+        sorted_symbols = list(map(attrgetter("name"), terminals))
         return sorted(terminal_names, key=sorted_symbols.index)
 
     def trim(self, node_names: Iterable[str]) -> Iterable[Rule]:
@@ -177,8 +189,9 @@ class Grammar:
 
             yield Rule(rule.origin, children, rule.order, rule.alias, rule.options)
 
-    def _iter_breadth_first(self, start: Optional[str] = None, *,
-                            predicate: Callable[[Rule], bool] = lambda r: True) -> Iterable[Rule]:
+    def _iter_breadth_first(
+        self, start: Optional[str] = None, *, predicate: Callable[[Rule], bool] = lambda r: True
+    ) -> Iterable[Rule]:
 
         start = NonTerminal(start) if start else self.start
 
@@ -191,8 +204,9 @@ class Grammar:
                 for next_rule in self._traverse_rule(rule):
                     to_visit.append(next_rule)
 
-    def _iter_depth_first(self, start: Optional[str] = None, *,
-                          predicate: Callable[[Rule], bool] = lambda r: True) -> Iterable[Rule]:
+    def _iter_depth_first(
+        self, start: Optional[str] = None, *, predicate: Callable[[Rule], bool] = lambda r: True
+    ) -> Iterable[Rule]:
         def _iter(rule):
             if predicate(rule):
                 yield rule

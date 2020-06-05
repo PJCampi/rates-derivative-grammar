@@ -9,18 +9,28 @@ from lark.utils import classify
 from lark.reconstruct import is_discarded_terminal
 
 
-__all__ = ['Node', 'normalize', 'denormalize', 'to_name', 'to_value', 'to_path_root',
-           'make_parser', 'PATH_DELIMITER', 'classify', 'is_discarded_terminal',
-           'is_inline_rule']
+__all__ = [
+    "Node",
+    "normalize",
+    "denormalize",
+    "to_name",
+    "to_value",
+    "to_path_root",
+    "make_parser",
+    "PATH_DELIMITER",
+    "classify",
+    "is_discarded_terminal",
+    "is_inline_rule",
+]
 
 
 Node = Union[Token, Tree]
 
-PATH_DELIMITER = '__'
+PATH_DELIMITER = "__"
 
 
 def is_inline_rule(rule: Rule) -> bool:
-    return rule.origin.name.startswith('_') or rule.options.expand1 or rule.alias
+    return rule.origin.name.startswith("_") or rule.options.expand1 or rule.alias
 
 
 def normalize(name: str) -> str:
@@ -55,10 +65,12 @@ def to_value(node: Node, *, expand_single_child=True):
     raise NotImplementedError()
 
 
-def make_parser(rules: Iterable[Rule],
-                start_symbol: str = 'start',
-                match: Optional[Callable] = None,
-                callbacks: Optional[Dict] = None) -> Parser:
+def make_parser(
+    rules: Iterable[Rule],
+    start_symbol: str = "start",
+    match: Optional[Callable] = None,
+    callbacks: Optional[Dict] = None,
+) -> Parser:
 
     rules = list(rules)
 
@@ -66,8 +78,10 @@ def make_parser(rules: Iterable[Rule],
         callbacks = ParseTreeBuilder(rules, Tree).create_callback(None)
 
     if not match:
+
         def match_func(terminal: Terminal, node: Node) -> bool:
             return terminal.name == to_name(node)
+
         match = match_func
 
     return Parser(ParserConf(rules, callbacks, [start_symbol]), match)

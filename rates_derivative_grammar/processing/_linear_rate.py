@@ -1,72 +1,115 @@
-
 from ._base import Processor, processors_registry
 from ._generic import SingleSizeProcessorMixin, MultiSizeProcessorMixin, LeverageScheduleProcessorMixin
 
 
-__all__ = ['CrossCurrencySwapProcessor', 'FixFloatSwapProcessor', 'FraProcessor', 'TenorBasisSwapProcessor',
-           'SwapCurveProcessor', 'SwapFlyProcessor', 'LeverageSwapCurveProcessor', 'LeverageSwapFlyProcessor']
+__all__ = [
+    "CrossCurrencySwapProcessor",
+    "FixFloatSwapProcessor",
+    "FraProcessor",
+    "TenorBasisSwapProcessor",
+    "SwapCurveProcessor",
+    "SwapFlyProcessor",
+    "LeverageSwapCurveProcessor",
+    "LeverageSwapFlyProcessor",
+]
 
 
 class LinearRateProcessor(Processor):
-    grammar = 'linear_rate'
+    grammar = "linear_rate"
 
 
-class CrossCurrencySwapProcessor(SingleSizeProcessorMixin,
-                                 LinearRateProcessor):
-    product_type = 'cross_currency_swap'
-    attribute_names = ('currencies', 'is_mtm', 'start_time', 'end_time',
-                       'strike', 'float_freq', 'size', 'is_risk')
+class CrossCurrencySwapProcessor(SingleSizeProcessorMixin, LinearRateProcessor):
+    product_type = "cross_currency_swap"
+    attribute_names = ("currencies", "is_mtm", "start_time", "end_time", "strike", "float_freq", "size", "is_risk")
 
 
-class FixFloatSwapProcessor(SingleSizeProcessorMixin,
-                            LinearRateProcessor):
-    product_type = 'fix_float_swap'
-    attribute_names = ('currency', 'start_time', 'end_time', 'strike',
-                       'float_freq', 'fixed_daycount', 'size', 'is_risk')
+class FixFloatSwapProcessor(SingleSizeProcessorMixin, LinearRateProcessor):
+    product_type = "fix_float_swap"
+    attribute_names = (
+        "currency",
+        "start_time",
+        "end_time",
+        "strike",
+        "float_freq",
+        "fixed_daycount",
+        "size",
+        "is_risk",
+    )
 
 
-class FraProcessor(SingleSizeProcessorMixin,
-                   LinearRateProcessor):
-    product_type = 'fra'
-    attribute_names = ('currency', 'start_time', 'end_time',
-                       'is_imm', 'strike', 'size')
+class FraProcessor(SingleSizeProcessorMixin, LinearRateProcessor):
+    product_type = "fra"
+    attribute_names = ("currency", "start_time", "end_time", "is_imm", "strike", "size")
 
 
-class TenorBasisSwapProcessor(SingleSizeProcessorMixin,
-                              LinearRateProcessor):
-    product_type = 'tenor_basis_swap'
-    attribute_names = ('currency', 'start_time', 'end_time', 'strike',
-                       'float_freq', 'fixed_daycount', 'size', 'is_risk')
+class TenorBasisSwapProcessor(SingleSizeProcessorMixin, LinearRateProcessor):
+    product_type = "tenor_basis_swap"
+    attribute_names = (
+        "currency",
+        "start_time",
+        "end_time",
+        "strike",
+        "float_freq",
+        "fixed_daycount",
+        "size",
+        "is_risk",
+    )
 
 
-class SwapCurveProcessor(MultiSizeProcessorMixin,
-                         LinearRateProcessor):
-    product_type = 'swap_curve'
-    attribute_names = ('currency', 'start_time', 'end_time', 'strike',
-                       'float_freq', 'fixed_daycount', 'size', 'is_risk')
+class SwapCurveProcessor(MultiSizeProcessorMixin, LinearRateProcessor):
+    product_type = "swap_curve"
+    attribute_names = (
+        "currency",
+        "start_time",
+        "end_time",
+        "strike",
+        "float_freq",
+        "fixed_daycount",
+        "size",
+        "is_risk",
+    )
 
 
-class SwapFlyProcessor(MultiSizeProcessorMixin,
-                       LinearRateProcessor):
-    product_type = 'swap_fly'
-    attribute_names = ('currency', 'start_time', 'end_time', 'strike',
-                       'float_freq', 'fixed_daycount', 'size', 'is_risk')
+class SwapFlyProcessor(MultiSizeProcessorMixin, LinearRateProcessor):
+    product_type = "swap_fly"
+    attribute_names = (
+        "currency",
+        "start_time",
+        "end_time",
+        "strike",
+        "float_freq",
+        "fixed_daycount",
+        "size",
+        "is_risk",
+    )
 
 
-class LeverageSwapCurveProcessor(MultiSizeProcessorMixin,
-                                 LeverageScheduleProcessorMixin,
-                                 LinearRateProcessor):
-    product_type = 'leverage_swap_curve'
-    attribute_names = ('currency', 'start_time', 'end_time', 'strike',
-                       'float_freq', 'fixed_daycount', 'size', 'is_risk')
+class LeverageSwapCurveProcessor(MultiSizeProcessorMixin, LeverageScheduleProcessorMixin, LinearRateProcessor):
+    product_type = "leverage_swap_curve"
+    attribute_names = (
+        "currency",
+        "start_time",
+        "end_time",
+        "strike",
+        "float_freq",
+        "fixed_daycount",
+        "size",
+        "is_risk",
+    )
 
 
-class LeverageSwapFlyProcessor(MultiSizeProcessorMixin,
-                               LeverageScheduleProcessorMixin,
-                               LinearRateProcessor):
-    product_type = 'leverage_swap_fly'
-    attribute_names = ('currency', 'start_time', 'end_time', 'strike',
-                       'float_freq', 'fixed_daycount', 'size', 'is_risk')
+class LeverageSwapFlyProcessor(MultiSizeProcessorMixin, LeverageScheduleProcessorMixin, LinearRateProcessor):
+    product_type = "leverage_swap_fly"
+    attribute_names = (
+        "currency",
+        "start_time",
+        "end_time",
+        "strike",
+        "float_freq",
+        "fixed_daycount",
+        "size",
+        "is_risk",
+    )
 
 
 processors_registry[CrossCurrencySwapProcessor.to_key()] = CrossCurrencySwapProcessor

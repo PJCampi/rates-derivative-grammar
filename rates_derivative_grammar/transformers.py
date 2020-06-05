@@ -5,7 +5,7 @@ from lark import Tree, Transformer, Token
 from .conversion import TokenConverterRegistry, TokenConverterRegistrationError
 
 
-__all__ = ['RenameNodeTransformer', 'FromTokenConversionTransformer']
+__all__ = ["RenameNodeTransformer", "FromTokenConversionTransformer"]
 
 
 class RenameNodeTransformer(Transformer):

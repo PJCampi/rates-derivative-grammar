@@ -1,6 +1,6 @@
 from enum import Enum
 
-__all__ = ['Currency', 'DayCount', 'CapFloorStrategy', 'SettlementMethod', 'SwaptionStrategy']
+__all__ = ["Currency", "DayCount", "CapFloorStrategy", "SettlementMethod", "SwaptionStrategy"]
 
 
 class Currency(Enum):

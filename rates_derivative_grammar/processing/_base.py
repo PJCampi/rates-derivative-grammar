@@ -5,11 +5,11 @@ from lark import Transformer
 from ..utils import PATH_DELIMITER, Node, to_name
 
 
-__all__ = ['Processor', 'processors_registry', 'to_processor_key']
+__all__ = ["Processor", "processors_registry", "to_processor_key"]
 
 
 def to_processor_key(asset_class: str, product_type: str) -> str:
-    return f'{asset_class}{PATH_DELIMITER}{product_type}'
+    return f"{asset_class}{PATH_DELIMITER}{product_type}"
 
 
 class Processor(Transformer):
@@ -19,8 +19,8 @@ class Processor(Transformer):
     grammar parses.
     """
 
-    grammar = ''
-    product_type = ''
+    grammar = ""
+    product_type = ""
     attribute_names: Tuple[str, ...] = tuple()
 
     @classmethod

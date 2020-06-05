@@ -18,20 +18,19 @@ from .transformers import RenameNodeTransformer, FromTokenConversionTransformer
 from .utils import to_path_root, normalize, PATH_DELIMITER, make_parser, to_name, denormalize, Node
 from .visitors import AttributeVisitor
 
-__all__ = ['AssetClassParser', 'AssetClassFormatter', 'GRAMMAR_PATH']
+__all__ = ["AssetClassParser", "AssetClassFormatter", "GRAMMAR_PATH"]
 
-GRAMMAR_PATH = os.path.join(os.path.dirname(__file__), 'grammar')
+GRAMMAR_PATH = os.path.join(os.path.dirname(__file__), "grammar")
 if GRAMMAR_PATH not in IMPORT_PATHS:
     IMPORT_PATHS.append(GRAMMAR_PATH)
 
-UNKNOWN = 'UNKNOWN'
+UNKNOWN = "UNKNOWN"
 
 
 class AssetClassParser:
     """ The parser parses strings """
 
-    def __init__(self, asset_class: str, *,
-                 grammar_path: Optional[str] = None):
+    def __init__(self, asset_class: str, *, grammar_path: Optional[str] = None):
 
         self.asset_class = asset_class
         self.grammar_path = grammar_path or GRAMMAR_PATH
@@ -54,7 +53,7 @@ class AssetClassParser:
         # get product tree
         if len(parsed.children) != 1:
             # This should never happen
-            raise NotImplementedError('Something is wrong with your grammar. Only one product should be parsed by it.')
+            raise NotImplementedError("Something is wrong with your grammar. Only one product should be parsed by it.")
 
         product = parsed.children[0]
         product_type = product.data
@@ -89,18 +88,17 @@ class AssetClassParser:
         instantiate an instance of the grammar parser
         """
         grammar, products = [], []
-        for file_path in glob(os.path.join(grammar_path, f'{asset_class}*{EXT}')):
-            to_import = os.path.basename(file_path).replace(EXT, '')
+        for file_path in glob(os.path.join(grammar_path, f"{asset_class}*{EXT}")):
+            to_import = os.path.basename(file_path).replace(EXT, "")
             product = to_path_root(to_import)
-            grammar.append(f'%import .{to_import}.start -> {product}')
+            grammar.append(f"%import .{to_import}.start -> {product}")
             products.append(product)
 
         grammar.append(f"start: {' | '.join(products)}")
-        return Lark('\n'.join(grammar))
+        return Lark("\n".join(grammar))
 
 
 class TokenMatcher:
-
     def __init__(self, terminals: Iterable[TerminalDef]):
         self.terminals_dict = {Terminal(def_.name): re.compile(def_.pattern.to_regexp()) for def_ in terminals}
 
@@ -134,8 +132,7 @@ class TokenMatcher:
 class AssetClassFormatter:
     """ The formatter formats attributes """
 
-    def __init__(self, asset_class: str, *,
-                 grammar_path: Optional[str] = None):
+    def __init__(self, asset_class: str, *, grammar_path: Optional[str] = None):
         self.asset_class = asset_class
         self.grammar_path = grammar_path or GRAMMAR_PATH
 
@@ -211,10 +208,12 @@ class AssetClassFormatter:
         for i, node in enumerate(nodes):
             if isinstance(node, Tree):
                 rules = list(analyser.get_rules(node.data))
-                token_parser = make_parser(rules,
-                                           start_symbol=node.data,
-                                           match=token_matcher.match,
-                                           callbacks={rule: partial(self._make_converted_tree, rule) for rule in rules})
+                token_parser = make_parser(
+                    rules,
+                    start_symbol=node.data,
+                    match=token_matcher.match,
+                    callbacks={rule: partial(self._make_converted_tree, rule) for rule in rules},
+                )
                 nodes[i] = token_parser.parse(node.children, start=node.data)
             else:
                 nodes[i] = TokenConverterRegistry.get(node.type).to_token(node.type, node.value)
@@ -232,7 +231,7 @@ class AssetClassFormatter:
         # reconstruct
         # NOTE: for some reason reconstructor.reconstruct appends a space between all alphanumerical characters so
         # I had to use ._reconstruct instead.
-        string = ''.join(reconstructor._reconstruct(tree))
+        string = "".join(reconstructor._reconstruct(tree))
 
         return string
 
@@ -242,7 +241,7 @@ class AssetClassFormatter:
         instantiate an instance of the grammar parser, the "Grammar" analyser tool, and the reconstructor
         """
         # get grammar analyser
-        path = os.path.join(self.grammar_path, f'{self.asset_class}{PATH_DELIMITER}{product_type}{EXT}')
+        path = os.path.join(self.grammar_path, f"{self.asset_class}{PATH_DELIMITER}{product_type}{EXT}")
         grammar = Lark.open(path)
 
         # make analyser

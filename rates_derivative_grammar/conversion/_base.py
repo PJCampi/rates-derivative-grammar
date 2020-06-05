@@ -4,9 +4,9 @@ from lark import Token
 
 from ..utils import to_path_root, PATH_DELIMITER
 
-__all__ = ['TokenConverterRegistry', 'TokenConverterRegistrationError', 'TokenConversionError']
+__all__ = ["TokenConverterRegistry", "TokenConverterRegistrationError", "TokenConversionError"]
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class TokenConverterRegistrationError(KeyError):
@@ -76,7 +76,7 @@ class TokenConverterRegistry:
             raise TokenConverterRegistrationError(name)
 
         if cls.match_by_full_path:
-            if name == match.name or (match.grammar and name == f'{match.grammar}{PATH_DELIMITER}{match.name}'):
+            if name == match.name or (match.grammar and name == f"{match.grammar}{PATH_DELIMITER}{match.name}"):
                 return match
             raise TokenConverterRegistrationError(name)
 
@@ -84,4 +84,4 @@ class TokenConverterRegistry:
 
     @classmethod
     def _converter_to_key(cls, converter: TTokenConverter) -> str:
-        return f'{converter.name}'
+        return f"{converter.name}"

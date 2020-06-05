@@ -1,4 +1,4 @@
-%import .common.quantum (CURRENCY, DAYCOUNT, SETTLEMENT_METHOD, SWAPTION_TYPE)
+%import .common.custom (CURRENCY, DAYCOUNT, SETTLEMENT_METHOD, SWAPTION_TYPE)
 %import .common.tenors (FLOAT_TENOR)
 %import .common.shared (time, STRIKE_PCT, basis, size, IS_RISK, _relative_strike)
 

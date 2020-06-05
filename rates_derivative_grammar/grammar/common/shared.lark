@@ -34,7 +34,7 @@ _triple_years: YEAR_INT _TIME_SEP YEAR_INT _TIME_SEP YEAR_INT _TIME_SEP
 // **********************************
 
 TENOR_FREQ: "1D" | "1S" | "3S" | "6S" | "12S"
-basis: "B" TENOR_FREQ
+basis: TENOR_FREQ
 
 // **********************************
 // SIZE
@@ -44,7 +44,7 @@ basis: "B" TENOR_FREQ
 
 // NOTE: I had to define the notional as a regex pattern because the notional must be resolved in a greedy way
 NOTIONAL_NUMBER: /[-]?(0|[1-9][0-9]*)([.](25|75|[0-9]{1}))?/
-NOTIONAL_UNIT: "T" | "BN" | "MM" | "K"
+NOTIONAL_UNIT: "T" | "B" | "M" | "K"
 
 size: NOTIONAL_NUMBER NOTIONAL_UNIT?
 _double_sizes: size _SEP size

@@ -1,4 +1,4 @@
-%import .common.quantum (CURRENCY, CAP_FLOOR_TYPE)
+%import .common.custom (CURRENCY, CAP_FLOOR_TYPE)
 %import .common.shared (time, STRIKE_PCT, basis, size, IS_RISK, _relative_strike)
 
 

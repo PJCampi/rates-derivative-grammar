@@ -1,4 +1,4 @@
-%import .common.quantum.CURRENCY
+%import .common.custom.CURRENCY
 %import .common.shared (time, STRIKE_PCT, basis, IS_RISK)
 %import .common.shared.size -> _size
 

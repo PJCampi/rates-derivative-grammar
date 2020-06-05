@@ -5,7 +5,7 @@ from lark import Visitor, Tree, Token
 from .utils import Node, to_name, to_value, normalize
 
 
-__all__ = ['AttributeVisitor', 'get_tokens_dict']
+__all__ = ["AttributeVisitor", "get_tokens_dict"]
 
 
 class AttributeVisitor(Visitor):
@@ -47,8 +47,7 @@ def get_tokens_dict(node: Node) -> Dict[str, Any]:
         if len(node.children) == 1 and normalize(to_name(node.children[0])) == key:
             return get_tokens_dict(node.children[0])
 
-        return {key: {k: v for child in node.children
-                      for k, v in get_tokens_dict(child).items()}}
+        return {key: {k: v for child in node.children for k, v in get_tokens_dict(child).items()}}
 
     # if it is only a token
     return {key: to_value(node)}

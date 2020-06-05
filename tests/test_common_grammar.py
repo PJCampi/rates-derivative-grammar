@@ -124,6 +124,6 @@ class TestSharedGrammar:
 
     @pytest.mark.parametrize('node', ['basis'])
     @pytest.mark.parametrize('to_parse, value',
-                             [('B1D', '1D'), ('B1S', '1M')])
+                             [('1D', '1D'), ('1S', '1M')])
     def test_basis_success(self, node, to_parse, value):
         assert_interpretation(self.grammar, node, to_parse, value)

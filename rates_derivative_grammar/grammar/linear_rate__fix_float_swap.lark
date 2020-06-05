@@ -1,4 +1,4 @@
-%import .common.quantum (CURRENCY, DAYCOUNT)
+%import .common.custom (CURRENCY, DAYCOUNT)
 %import .common.shared (time, STRIKE_PCT, basis, IS_RISK)
 %import .common.shared.size -> _size
 

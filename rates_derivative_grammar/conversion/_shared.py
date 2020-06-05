@@ -8,18 +8,29 @@ from ._base import TokenConverter, TokenConversionError
 from ._generic import BooleanConverter, FloatConverter, DictConverter
 
 
-__all__ = ['DateConverter', 'MonthIntConverter', 'YearIntConverter', 'NotionalUnitConverter', 'IsRiskConverter',
-           'TenorFreqConverter', 'StrikeBpConverter', 'FullStrikeBpConverter', 'StrikePctConverter',
-           'FullStrikePctConverter', 'IsRelativeConverter', 'NotionalNumberConverter']
+__all__ = [
+    "DateConverter",
+    "MonthIntConverter",
+    "YearIntConverter",
+    "NotionalUnitConverter",
+    "IsRiskConverter",
+    "TenorFreqConverter",
+    "StrikeBpConverter",
+    "FullStrikeBpConverter",
+    "StrikePctConverter",
+    "FullStrikePctConverter",
+    "IsRelativeConverter",
+    "NotionalNumberConverter",
+]
 
-GRAMMAR = 'shared'
+GRAMMAR = "shared"
 
 
 class DateConverter(TokenConverter[date]):
 
-    grammar = 'dates'
-    name = 'DATE'
-    format = '%d%b%y'
+    grammar = "dates"
+    name = "DATE"
+    format = "%d%b%y"
 
     @classmethod
     def from_token(cls, token: Token) -> date:
@@ -31,8 +42,8 @@ class DateConverter(TokenConverter[date]):
     @classmethod
     def to_token(cls, name: str, obj: date) -> Token:
         if not isinstance(obj, date):
-            raise TokenConversionError(f'{cls.__qualname__} can only format dates.')
-        return Token(name, obj.strftime(cls.format).upper().lstrip('0'))
+            raise TokenConversionError(f"{cls.__qualname__} can only format dates.")
+        return Token(name, obj.strftime(cls.format).upper().lstrip("0"))
 
 
 class TenorIntConverter(TokenConverter[str]):
@@ -41,102 +52,102 @@ class TenorIntConverter(TokenConverter[str]):
 
     @classmethod
     def from_token(cls, token: Token) -> str:
-        return f'{token.value}{cls.tenor_unit}'
+        return f"{token.value}{cls.tenor_unit}"
 
     @classmethod
     def to_token(cls, name: str, obj: str) -> Token:
         if not isinstance(obj, str):
-            raise TokenConversionError(f'{cls.__qualname__} can only format strings.')
-        return Token(name, obj[:-len(cls.tenor_unit)])
+            raise TokenConversionError(f"{cls.__qualname__} can only format strings.")
+        return Token(name, obj[: -len(cls.tenor_unit)])
 
 
 class MonthIntConverter(TenorIntConverter):
 
-    grammar = 'tenors'
-    name = 'MONTH_INT'
-    tenor_unit = 'M'
+    grammar = "tenors"
+    name = "MONTH_INT"
+    tenor_unit = "M"
 
 
 class YearIntConverter(TenorIntConverter):
 
-    grammar = 'tenors'
-    name = 'YEAR_INT'
-    tenor_unit = 'Y'
+    grammar = "tenors"
+    name = "YEAR_INT"
+    tenor_unit = "Y"
 
 
 class NotionalUnitConverter(DictConverter[float]):
 
     grammar = GRAMMAR
-    name = 'NOTIONAL_UNIT'
-    mapping = bidict({'T': 1e12, 'BN': 1e9, 'MM': 1e6, 'K': 1e3})
+    name = "NOTIONAL_UNIT"
+    mapping = bidict({"T": 1e12, "B": 1e9, "M": 1e6, "K": 1e3})
 
 
 class IsRiskConverter(BooleanConverter):
 
     grammar = GRAMMAR
-    name = 'IS_RISK'
-    flag = 'R'
-    
+    name = "IS_RISK"
+    flag = "R"
+
 
 class TenorFreqConverter(TokenConverter[str]):
 
     grammar = GRAMMAR
-    name = 'TENOR_FREQ'
+    name = "TENOR_FREQ"
 
     @classmethod
     def from_token(cls, token: Token) -> str:
-        return token.value.replace('S', 'M')
+        return token.value.replace("S", "M")
 
     @classmethod
     def to_token(cls, name: str, obj: str) -> Token:
         if not isinstance(obj, str):
-            raise TokenConversionError(f'{cls.__qualname__} can only format strings.')
-        return Token(name, obj.replace('M', 'S'))
-    
+            raise TokenConversionError(f"{cls.__qualname__} can only format strings.")
+        return Token(name, obj.replace("M", "S"))
+
 
 class StrikeBpConverter(FloatConverter):
 
     grammar = GRAMMAR
-    name = 'STRIKE_BP'
+    name = "STRIKE_BP"
     scaling_factor = 10_000
-    formatting = '.4g'
+    formatting = ".4g"
 
 
 class FullStrikeBpConverter(StrikeBpConverter):
 
-    name = 'FULL_STRIKE_BP'
+    name = "FULL_STRIKE_BP"
 
 
 class StrikePctConverter(FloatConverter):
 
     grammar = GRAMMAR
-    name = 'STRIKE_PCT'
+    name = "STRIKE_PCT"
     scaling_factor = 100
-    formatting = '.6g'
+    formatting = ".6g"
 
 
 class FullStrikePctConverter(StrikePctConverter):
-    
-    name = 'FULL_STRIKE_PCT'
+
+    name = "FULL_STRIKE_PCT"
 
 
 class IsRelativeConverter(BooleanConverter):
 
     grammar = GRAMMAR
-    name = 'IS_RELATIVE'
-    flag = 'A'
+    name = "IS_RELATIVE"
+    flag = "A"
 
 
 class NotionalNumberConverter(FloatConverter):
     grammar = GRAMMAR
-    name = 'NOTIONAL_NUMBER'
+    name = "NOTIONAL_NUMBER"
     scaling_factor = 1
 
     @classmethod
     def to_token(cls, name: str, obj: float) -> Token:
 
         if not isinstance(obj, (int, float)):
-            raise TokenConversionError(f'{cls.__qualname__} can only format floating point numbers.')
+            raise TokenConversionError(f"{cls.__qualname__} can only format floating point numbers.")
 
         # decimals to match
         decimals = [i / 10 for i in range(10)] + [0.25, 0.5, 0.75]
@@ -147,4 +158,4 @@ class NotionalNumberConverter(FloatConverter):
         decimal = (-1 if decimal < 0 else 1) * decimals[distances.index(min(distances))]
 
         # make token
-        return Token(name, f'{integer + decimal}'.replace('.0', ''))
+        return Token(name, f"{integer + decimal}".replace(".0", ""))
